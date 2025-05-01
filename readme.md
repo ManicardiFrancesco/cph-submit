@@ -2,7 +2,7 @@
 
 Browser add on that enables Codeforces submit with [Competitive Programming Helper](https://github.com/agrawal-d/cph)
 
-Works for Firefox and Chrome.
+Works for Chrome as of 2025-05-01. should also work on firefox but i haven't tested it.
 
 ## Installation For FireFox
 
