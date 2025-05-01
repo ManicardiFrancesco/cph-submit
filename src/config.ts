@@ -1,8 +1,4 @@
-const config = {
-  cphServerEndpoint: new URL("http://localhost:27121/getSubmit"),
-  cfSubmitPage: new URL("https://codeforces.com/problemset/submit"),
-  loopTimeOut: 3000,
-  debug: false,
+export default {
+  cphEndpoint: "http://localhost:27121/getSubmit",
+  pollIntervalMs: 3000
 };
-
-export default config;

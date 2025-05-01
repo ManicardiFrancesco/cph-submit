@@ -1,14 +1,24 @@
 {
-  "name": "CPH Submit",
-  "manifest_version": 2,
-  "homepage_url": "https://github.com/agrawal-d/cph-submit",
-  "version": "1.4.0",
-  "description": "Codeforces Submit add-on for Competitive Programming Helper.",
+  "name": "CPH Submit (Fresh)",
+  "manifest_version": 3,
+  "version": "0.1.0",
+  "description": "Auto-submit Codeforces solutions from Competitive Programming Helper",
+  "permissions": [
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:27121/*",
+    "https://codeforces.com/*"
+  ],
   "background": {
-    "scripts": ["dist/backgroundScript.js"]
+    "service_worker": "dist/background.js"
   },
-  "permissions": ["*://localhost/*", "*://codeforces.com/*", "webNavigation"],
-  "icons": {
-    "48": "icon-48.png"
-  }
+  "content_scripts": [
+    {
+      "matches": ["https://codeforces.com/*/submit*"],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
 }

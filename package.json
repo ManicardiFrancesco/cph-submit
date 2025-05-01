@@ -6,9 +6,9 @@
   "author": "Divyanshu Agrawal, Abdallah Maher",
   "license": "MIT",
   "devDependencies": {
+    "@types/chrome": "^0.0.317",
     "ts-loader": "^9.5.0",
     "typescript": "^5.3.3",
-    "@types/chrome": "^0.0.114",
     "webpack": "^5.89.0",
     "webpack-cli": "^3.3.12"
   },

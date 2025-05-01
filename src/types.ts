@@ -1,15 +1,11 @@
-export type CphEmptyResponse = {
-  empty: true;
-};
-
-export type CphSubmitResponse = {
+export interface CphSubmitResponse {
   empty: false;
   problemName: string;
-  url: string;
-  sourceCode: string;
   languageId: number;
-};
+  sourceCode: string;
+  url: string;
+}
 
-export type ContentScriptData = {
-  type: "cph-submit";
-} & CphSubmitResponse;
+export interface CphEmptyResponse {
+  empty: true;
+}

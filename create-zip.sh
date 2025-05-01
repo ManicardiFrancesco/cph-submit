@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 echo "Creating extension.zip"
 echo "Executing npm webpack script"
 npm run webpack

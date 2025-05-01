@@ -1,9 +1,11 @@
+// webpack.config.js
 const path = require("path");
 
 module.exports = {
+  mode: process.env.NODE_ENV || "production",
   entry: {
-    backgroundScript: "./src/backgroundScript.ts",
-    injectedScript: "./src/injectedScript.ts",
+    background: "./src/background.ts",       // service_worker
+    content: "./src/content.ts",             // content script
   },
   output: {
     filename: "[name].js",
@@ -12,13 +14,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: "ts-loader",
+        test: /\.ts$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".js"],
   },
-  devtool: 'inline-source-map'
 };
