@@ -9,54 +9,72 @@ interface Payload {
 }
 
 chrome.runtime.onMessage.addListener((data: Payload) => {
-  log("▶️ Received payload, will fill form in 200ms", data);
+  log("▶️ Received payload, filling form + auto-submit", data);
 
   setTimeout(() => {
-    // 1) Grab the form by its exact classes
     const form = document.querySelector<HTMLFormElement>(
       "form.submit-form.submitFrameForm"
     );
     if (!form) {
-      log("❌ Could not find <form class='submit-form submitFrameForm'>");
+      log("❌ Could not find the submission form");
       return;
     }
 
-    // 2) Problem code / index
+    // 1) Problem code or contest index
     if (data.url.includes("/contest/")) {
-      const idx = data.url.split("/problem/")[1];
-      const sel = form.querySelector<HTMLSelectElement>(
+      const problemIndex = data.url.split("/problem/")[1];
+      const idxSelect = form.querySelector<HTMLSelectElement>(
         "select[name='submittedProblemIndex']"
       );
-      if (sel) sel.value = idx;
+      if (idxSelect) {
+        idxSelect.value = problemIndex;
+        idxSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        log("✔️ Set contest problem index to", problemIndex);
+      }
     } else {
-      const codeIn = form.querySelector<HTMLInputElement>(
+      const codeInput = form.querySelector<HTMLInputElement>(
         "input[name='submittedProblemCode']"
       );
-      if (codeIn) codeIn.value = data.problemName;
+      if (codeInput) {
+        codeInput.value = data.problemName;
+        codeInput.dispatchEvent(new Event("input", { bubbles: true }));
+        log("✔️ Set problem code to", data.problemName);
+      }
     }
 
-    // 3) Language
-    const langSel = form.querySelector<HTMLSelectElement>(
+    // 2) Language dropdown (force G++23 = 91 )
+    const langSelect = form.querySelector<HTMLSelectElement>(
       "select[name='programTypeId']"
     );
-    if (langSel) langSel.value = data.languageId.toString();
+    if (langSelect) {
+      const desiredLang = 91;
+      langSelect.value = desiredLang.toString();
+      langSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      log("✔️ Selected language ID", desiredLang);
+    }
 
-    // 4) Source
-    const ta = form.querySelector<HTMLTextAreaElement>(
+    // 3) Source textarea
+    const sourceArea = form.querySelector<HTMLTextAreaElement>(
       "textarea[name='source'], #sourceCodeTextarea"
     );
-    if (ta) ta.value = data.sourceCode;
+    if (sourceArea) {
+      sourceArea.value = data.sourceCode;
+      sourceArea.dispatchEvent(new Event("input", { bubbles: true }));
+      log("✔️ Pasted source code (length:", data.sourceCode.length, ")");
+    }
 
-    // 5) ftaa/bfaa are already populated by CF's own inline script once ready
-    //    so we don't need to override; just log what's there:
-    const ftaaIn = form.querySelector<HTMLInputElement>("input[name='ftaa']");
-    const bfaaIn = form.querySelector<HTMLInputElement>("input[name='bfaa']");
-    log("Hidden tokens:",
-        "ftaa=", ftaaIn?.value?.slice(0,6), "...",
-        "bfaa=", bfaaIn?.value?.slice(0,6), "..."
+    // 4) Click the submit button
+    const submitBtn = form.querySelector<HTMLButtonElement | HTMLInputElement>(
+      "input[type='submit'], button[type='submit'], .submit"
     );
+    if (submitBtn) {
+      log("✔️ Found submit button");
+      log("👉 Clicking submit button");
+      (submitBtn as HTMLElement).click();
+    } else {
+      log("❌ Could not find submit button to click");
+    }
 
-    log("📝 Filled form, now submitting…");
-    form.submit();
+    log("✅ Fill + submit sequence complete");
   }, 200);
 });
